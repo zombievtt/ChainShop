@@ -1,0 +1,117 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import dao.Impl.BuyState;
+import model.Employee;
+import util.Cal;
+
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class EmployeeDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JComboBox cbMemberOrderStateList;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EmployeeDlg frame = new EmployeeDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public EmployeeDlg() {
+		Employee employee = (Employee)Cal.readFile("employee.txt");
+		setTitle("員工處理訂單狀態");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1168, 576);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lbShopName = new JLabel("------");
+		lbShopName.setHorizontalAlignment(SwingConstants.CENTER);
+		lbShopName.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbShopName.setForeground(new Color(0, 0, 0));
+		lbShopName.setBounds(10, 10, 160, 38);
+		lbShopName.setText(employee.getShopName());
+		contentPane.add(lbShopName);
+		
+		JLabel lbEmployeeName = new JLabel("------");
+		lbEmployeeName.setHorizontalAlignment(SwingConstants.CENTER);
+		lbEmployeeName.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbEmployeeName.setBounds(175, 10, 160, 38);
+		lbEmployeeName.setText("員工:" + employee.getName());
+		contentPane.add(lbEmployeeName);
+		
+		cbMemberOrderStateList = new JComboBox();
+		cbMemberOrderStateList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbMemberOrderStateList.setBounds(951, 10, 191, 38);
+		contentPane.add(cbMemberOrderStateList);
+		
+		cbMemberOrderStateList.addItem(BuyState.strUnread);
+		cbMemberOrderStateList.addItem(BuyState.strPreparing);
+		cbMemberOrderStateList.addItem(BuyState.strPickUp);
+		cbMemberOrderStateList.addItem(BuyState.strPickUped);
+		cbMemberOrderStateList.addItem(BuyState.strCallOff);
+		
+		JButton btnUpdateState = new JButton("狀態更新");
+		btnUpdateState.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnUpdateState.setBounds(951, 58, 191, 38);
+		contentPane.add(btnUpdateState);
+		
+		JButton btnRefresh = new JButton("重新整理");
+		btnRefresh.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnRefresh.setBounds(362, 10, 133, 38);
+		contentPane.add(btnRefresh);
+		
+		jScroll = new JScrollPane();
+		jScroll.setBounds(10, 106, 1132, 421);
+		contentPane.add(jScroll);
+		
+		JButton btnBack = new JButton("返回");
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				EmployeeLoginManager em = new EmployeeLoginManager();
+				em.setVisible(true);
+				dispose();
+			}
+		});
+		btnBack.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnBack.setBounds(362, 58, 133, 38);
+		contentPane.add(btnBack);
+	}
+}

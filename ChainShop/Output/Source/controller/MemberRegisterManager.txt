@@ -1,0 +1,42 @@
+public MemberRegisterManager() {
+	setTitle("會員註冊");
+	
+	JButton btnOK = new JButton("確定");
+	btnOK.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			String strName = name.getText().trim();
+			String strAccount = account.getText().trim();
+			String strPassword = password.getText().trim();
+			if (strName.isEmpty() ||
+				strAccount.isEmpty() ||
+				strPassword.isEmpty()
+				)
+			{
+				JOptionPane.showMessageDialog(null,"欄位不可為空白","會員註冊",JOptionPane.WARNING_MESSAGE);
+				return;	
+			}
+			
+			//取得資料庫會員帳號資訊
+			List<Member> l = new MemberServiceImpl().queryAllByAccount(strAccount);
+			if (l.size() > 0)
+			{
+				JOptionPane.showMessageDialog(null,"此帳戶已存在, 註冊失敗.","會員註冊",JOptionPane.WARNING_MESSAGE);
+			}
+			else
+			{
+				//填寫新增 的會員資訊
+				Member m = new Member();
+				m.setName(strName);
+				m.setAccount(strAccount);
+				m.setPassword(strPassword);
+
+				//註冊新會員
+				new MemberServiceImpl().addMember(m);
+				JOptionPane.showMessageDialog(null,"註冊成功.","會員註冊",JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	});
+	
+}
+

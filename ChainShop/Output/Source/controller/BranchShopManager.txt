@@ -1,0 +1,22 @@
+//將視窗位置設置在正中央
+setLocationRelativeTo(contentPane);
+JOptionPane.showMessageDialog(null,"您沒有分店可以編輯.","編輯分店",JOptionPane.WARNING_MESSAGE);
+		
+JButton btnEdit = new JButton("編輯分店");
+btnEdit.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+		if (l.size() > 0)
+		{
+			ShowEditBranchShop s = new ShowEditBranchShop();
+			s.setVisible(true);
+			dispose();
+		}
+		else
+		{
+			
+		}
+		
+	}
+});

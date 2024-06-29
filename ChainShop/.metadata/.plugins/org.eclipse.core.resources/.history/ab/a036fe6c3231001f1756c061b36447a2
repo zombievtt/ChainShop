@@ -1,0 +1,47 @@
+package dao.Impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import dao.DbConnection;
+import model.Employee;
+
+public class MemberDaoImpl {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addEmployeeDao(Employee e)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "insert into member(name, account, password, shop_name) values(?,?,?,?)";
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	
+	//Read
+	public List<Employee> queryAll()
+	{
+		Connection conn = DbConnection.getDb();
+		
+	}
+	public List<Employee> queryAllByShopName(String shopName);
+	
+	
+	
+	//Update
+	public void updateEmployeeById(Employee e, Integer Id);
+	
+	
+	//Delete
+	public void deleteEmployeeById(Integer id);
+}

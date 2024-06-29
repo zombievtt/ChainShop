@@ -1,0 +1,25 @@
+package dao;
+
+import java.util.List;
+
+import model.Employee;
+import model.Member;
+
+public interface MemberDao {
+	//Create
+	public void addMembereeDao(Employee e);
+	
+	
+	//Read
+	public List<Member> queryAll();
+	public List<Member> queryAllByShopName(String shopName);
+	
+	
+	
+	//Update
+	public void updateMemberById(Member e, Integer Id);
+	
+	
+	//Delete
+	public void deleteMemberById(Integer id);
+}

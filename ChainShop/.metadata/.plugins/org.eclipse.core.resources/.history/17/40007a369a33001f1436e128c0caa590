@@ -1,0 +1,138 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import model.BranchShop;
+import service.Impl.BranchShopServiceImpl;
+
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+public class ShowDeleteBranchShop extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JComboBox cbShopNameList;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ShowDeleteBranchShop frame = new ShowDeleteBranchShop();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ShowDeleteBranchShop() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("刪除分店");
+		setBounds(100, 100, 450, 138);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		//將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+				
+		cbShopNameList = new JComboBox();
+		cbShopNameList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbShopNameList.setBounds(10, 10, 135, 23);
+		contentPane.add(cbShopNameList);
+		
+		JButton btnCancel = new JButton("取消");
+		btnCancel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BranchShopManager bsm = new BranchShopManager();
+				bsm.setVisible(true);
+				dispose();
+			}
+		});
+		btnCancel.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnCancel.setBounds(183, 57, 113, 34);
+		contentPane.add(btnCancel);
+		
+//		cbShopNameList
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+		Integer size = l.size();
+		if (size.equals(0))
+		{
+			JOptionPane.showMessageDialog(null,"沒有分店可以刪除","刪除分店",JOptionPane.WARNING_MESSAGE);
+	
+		}
+		else
+		{
+			addCbList();
+				
+		}
+		
+		
+		JButton btnOK = new JButton("確定");
+		btnOK.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				List<BranchShop> l = null;
+				boolean b = checkOwnBranchShop();
+				if (b)
+				{
+					String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+					System.out.println(strShopName);
+
+					List<BranchShop> listBs = new BranchShopServiceImpl().queryAllByShopName(strShopName);
+					BranchShop bs = listBs.get(0);
+					Integer id = bs.getId();
+					new BranchShopServiceImpl().deleteBranchShopById(id);
+					Integer indexSelected = cbShopNameList.getSelectedIndex();
+					cbShopNameList.removeAll();
+					JOptionPane.showMessageDialog(null,"刪除分店成功","刪除分店",JOptionPane.WARNING_MESSAGE);
+					cbShopNameList.setSelectedIndex(0);
+					repaint();
+				}
+			}
+		});
+		btnOK.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnOK.setBounds(313, 57, 113, 34);
+		contentPane.add(btnOK);
+	}
+	
+	private void addCbList()
+	{
+		List<BranchShop> list = new BranchShopServiceImpl().queryAll();
+		for (BranchShop o:list)
+		{
+			cbShopNameList.addItem(o.getShopName());
+		}	
+	}
+	
+	private boolean checkOwnBranchShop()
+	{
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+		Integer size = l.size();
+		if (size.equals(0))
+		{
+			JOptionPane.showMessageDialog(null,"沒有分店可以刪除","刪除分店",JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+}

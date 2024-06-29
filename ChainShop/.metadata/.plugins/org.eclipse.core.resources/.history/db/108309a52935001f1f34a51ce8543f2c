@@ -1,0 +1,73 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import model.Employee;
+import util.Cal;
+
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+
+public class EmployeeDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JComboBox cbMemberOrderStateList;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EmployeeDlg frame = new EmployeeDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public EmployeeDlg() {
+		Employee employee = (Employee)Cal.readFile("employee.txt");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1053, 416);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lbShopName = new JLabel("------");
+		lbShopName.setHorizontalAlignment(SwingConstants.CENTER);
+		lbShopName.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbShopName.setForeground(new Color(0, 0, 0));
+		lbShopName.setBounds(10, 10, 160, 38);
+		lbShopName.setText(employee.getShopName());
+		contentPane.add(lbShopName);
+		
+		JLabel lbEmployeeName = new JLabel("------");
+		lbEmployeeName.setHorizontalAlignment(SwingConstants.CENTER);
+		lbEmployeeName.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbEmployeeName.setBounds(175, 10, 160, 38);
+		lbEmployeeName.setText(employee.getName());
+		contentPane.add(lbEmployeeName);
+		
+		cbMemberOrderStateList = new JComboBox();
+		cbMemberOrderStateList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbMemberOrderStateList.setBounds(836, 10, 191, 38);
+		contentPane.add(cbMemberOrderStateList);
+	}
+}

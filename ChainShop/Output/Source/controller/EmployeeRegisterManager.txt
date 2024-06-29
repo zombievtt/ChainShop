@@ -1,0 +1,80 @@
+
+
+public class EmployeeRegisterManager extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField name;
+	private JTextField account;
+	private JTextField password;
+	private JComboBox cbShopNameList;
+
+	public EmployeeRegisterManager() {
+		setTitle("員工註冊");
+
+		JButton btnOK = new JButton("確定");
+		btnOK.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String strName = name.getText().trim();
+				String strAccount = account.getText().trim();
+				String strPassword = password.getText().trim();
+				if (strName.isEmpty() ||
+					strAccount.isEmpty() ||
+					strPassword.isEmpty()
+				   )
+				{
+					JOptionPane.showMessageDialog(null,"欄位不可為空白","員工註冊",JOptionPane.WARNING_MESSAGE);
+				    return;	
+				}
+				
+				//取得想註冊的員工分店
+				String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+
+				//查詢該員工的帳號存不存在
+				List<Employee> l = new EmployeeServiceImpl().queryAllByAccount(strAccount);
+				if (l.size() > 0)
+				{
+					JOptionPane.showMessageDialog(null,"此帳戶已存在, 註冊失敗.","員工註冊",JOptionPane.WARNING_MESSAGE);
+				}
+				else
+				{
+					//填寫註冊員工資訊
+					Employee employee = new Employee();
+					employee.setName(strName);
+					employee.setAccount(strAccount);
+					employee.setPassword(strPassword);
+					employee.setShopName(strShopName);
+
+					//註冊員工
+					new EmployeeServiceImpl().addEmployee(employee);
+					JOptionPane.showMessageDialog(null,"註冊成功.","員工註冊",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
+		
+		// 載入所有分店資訊
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		};
+
+		//JComboBox 載入所有分店名稱
+		if (l.size() > 0) {
+			for (BranchShop b : l) {
+				cbShopNameList.addItem(b.getShopName());
+			}
+
+			cbShopNameList.addActionListener(actionListener);
+			cbShopNameList.setSelectedIndex(0);
+		} else {
+			JOptionPane.showMessageDialog(null, "沒有分店可以選擇", "員工註冊", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+}

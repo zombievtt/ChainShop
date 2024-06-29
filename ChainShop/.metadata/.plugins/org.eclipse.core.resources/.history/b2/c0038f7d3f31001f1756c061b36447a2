@@ -1,0 +1,228 @@
+package dao.Impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.DbConnection;
+import model.BranchShop;
+import model.BuyOrder;
+
+public class BranchShopDaoImpl {
+
+	public static void main(String[] args) {
+		BranchShop bs = new BranchShop("地球店", 0, 255, 255, 255, 255, 255, "肉絲炒麵", 90, "蛇肉炒麵", 120, "海鮮炒麵", 140);
+		new BranchShopDaoImpl().addBranchShopDaoImpl(bs);
+		
+//		BranchShop bs = new BranchShop("火星店", 255, 0, 0, 255, 255, 255, "豬肉炒麵", 100, "牛肉炒麵", 110, "海鮮炒麵", 120);
+//		new BranchShopDaoImpl().addBranchShopDaoImpl(bs);
+		
+//		List<BranchShop> l = new BranchShopDaoImpl().queryAll();
+//		System.out.println("size: "+ l.size());
+//		System.out.println("BrahShop: " + l.get(0).getShopName());
+//		System.out.println("BrahShop: " + l.get(0).getBackR());
+//		System.out.println("BrahShop: " + l.get(0).getBackG());
+//		System.out.println("BrahShop: " + l.get(0).getBackB());
+//		System.out.println("BrahShop: " + l.get(0).getForeR());
+//		System.out.println("BrahShop: " + l.get(0).getForeG());
+//		System.out.println("BrahShop: " + l.get(0).getForeB());
+//		System.out.println("BrahShop: " + l.get(0).getMenu000Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu000Price());
+//		System.out.println("BrahShop: " + l.get(0).getMenu001Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu001Price());
+//		System.out.println("BrahShop: " + l.get(0).getMenu002Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu002Price());
+//		
+//		System.out.println("===============================");
+//		System.out.println("BrahShop: " + l.get(1).getShopName());
+//		System.out.println("BrahShop: " + l.get(1).getBackR());
+//		System.out.println("BrahShop: " + l.get(1).getBackG());
+//		System.out.println("BrahShop: " + l.get(1).getBackB());
+//		System.out.println("BrahShop: " + l.get(1).getForeR());
+//		System.out.println("BrahShop: " + l.get(1).getForeG());
+//		System.out.println("BrahShop: " + l.get(1).getForeB());
+//		System.out.println("BrahShop: " + l.get(1).getMenu000Name());
+//		System.out.println("BrahShop: " + l.get(1).getMenu000Price());
+//		System.out.println("BrahShop: " + l.get(1).getMenu001Name());
+//		System.out.println("BrahShop: " + l.get(1).getMenu001Price());
+//		System.out.println("BrahShop: " + l.get(1).getMenu002Name());
+//		System.out.println("BrahShop: " + l.get(1).getMenu002Price());
+		
+//		List<BranchShop> l = new BranchShopDaoImpl().queryAllByShopName("水星店");
+//		System.out.println("size: "+ l.size());
+//		System.out.println("BrahShop: " + l.get(0).getShopName());
+//		System.out.println("BrahShop: " + l.get(0).getBackR());
+//		System.out.println("BrahShop: " + l.get(0).getBackG());
+//		System.out.println("BrahShop: " + l.get(0).getBackB());
+//		System.out.println("BrahShop: " + l.get(0).getForeR());
+//		System.out.println("BrahShop: " + l.get(0).getForeG());
+//		System.out.println("BrahShop: " + l.get(0).getForeB());
+//		System.out.println("BrahShop: " + l.get(0).getMenu000Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu000Price());
+//		System.out.println("BrahShop: " + l.get(0).getMenu001Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu001Price());
+//		System.out.println("BrahShop: " + l.get(0).getMenu002Name());
+//		System.out.println("BrahShop: " + l.get(0).getMenu002Price());
+		
+		
+//		BranchShop bs = new BranchShop("水星店", 0, 0, 255, 255, 255, 255, "豬肉炒麵", 120, "牛肉炒麵", 130, "海鮮炒麵", 140);
+//		new BranchShopDaoImpl().updateBranchShopById(bs, 1);
+		
+//		new BranchShopDaoImpl().deleteBranchShopById(1);
+
+	}
+
+	//Create
+	public void addBranchShopDaoImpl(BranchShop bs)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "insert into branch_shop(shop_name, back_r, back_g, back_b, fore_r, fore_g, fore_b, menu_000_name,  menu_000_price, menu_001_name, menu_001_price, menu_002_name, menu_002_price)"
+				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1,  bs.getShopName());
+			ps.setInt(2, bs.getBackR());
+			ps.setInt(3, bs.getBackG());
+			ps.setInt(4, bs.getBackB());
+			ps.setInt(5, bs.getForeR());
+			ps.setInt(6, bs.getForeG());
+			ps.setInt(7, bs.getForeB());
+			ps.setString(8, bs.getMenu000Name());
+			ps.setInt(9, bs.getMenu000Price());
+			ps.setString(10, bs.getMenu001Name());
+			ps.setInt(11, bs.getMenu001Price());
+			ps.setString(12, bs.getMenu002Name());
+			ps.setInt(13, bs.getMenu002Price());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//Read
+	public List<BranchShop> queryAll()
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "select * from king_shop.branch_shop";
+		List<BranchShop> l = new ArrayList<>();
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				BranchShop bs = new BranchShop();
+				bs.setId(rs.getInt("id"));
+				bs.setShopName(rs.getString("shop_name"));
+				bs.setBackR(rs.getInt("back_r"));
+				bs.setBackG(rs.getInt("back_g"));
+				bs.setBackB(rs.getInt("back_b"));
+				bs.setForeR(rs.getInt("fore_r"));
+				bs.setForeG(rs.getInt("fore_g"));
+				bs.setForeB(rs.getInt("fore_b"));
+				bs.setMenu000Name(rs.getString("menu_000_name"));
+				bs.setMenu000Price(rs.getInt("menu_000_price"));
+				bs.setMenu001Name(rs.getString("menu_001_name"));
+				bs.setMenu001Price(rs.getInt("menu_001_price"));
+				bs.setMenu002Name(rs.getString("menu_002_name"));
+				bs.setMenu002Price(rs.getInt("menu_002_price"));
+				l.add(bs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return l;
+	}
+	public List<BranchShop> queryAllByShopName(String shopName)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "select * from king_shop.branch_shop where shop_name = ?";
+		List<BranchShop> l = new ArrayList<BranchShop>();
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1, shopName);			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				BranchShop bs = new BranchShop();
+				bs.setId(rs.getInt("id"));
+				bs.setShopName(rs.getString("shop_name"));
+				bs.setBackR(rs.getInt("back_r"));
+				bs.setBackG(rs.getInt("back_g"));
+				bs.setBackB(rs.getInt("back_b"));
+				bs.setForeR(rs.getInt("fore_r"));
+				bs.setForeG(rs.getInt("fore_g"));
+				bs.setForeB(rs.getInt("fore_b"));
+				bs.setMenu000Name(rs.getString("menu_000_name"));
+				bs.setMenu000Price(rs.getInt("menu_000_price"));
+				bs.setMenu001Name(rs.getString("menu_001_name"));
+				bs.setMenu001Price(rs.getInt("menu_001_price"));
+				bs.setMenu002Name(rs.getString("menu_002_name"));
+				bs.setMenu002Price(rs.getInt("menu_002_price"));
+				l.add(bs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return l;
+	}
+	
+	
+	
+	//Update
+	public void updateBranchShopById(BranchShop bs, Integer Id) 
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "update king_shop.branch_shop set shop_name=?, back_r=?, back_g=?, back_b=?, fore_r=?, fore_g=?, fore_b=?, menu_000_name=?,  menu_000_price=?, menu_001_name=?, menu_001_price=?, menu_002_name=?, menu_002_price=? where id = ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1, bs.getShopName());
+			ps.setInt(2, bs.getBackR());
+			ps.setInt(3, bs.getBackG());
+			ps.setInt(4, bs.getBackB());
+			ps.setInt(5, bs.getForeR());
+			ps.setInt(6, bs.getForeG());
+			ps.setInt(7, bs.getForeB());
+			ps.setString(8, bs.getMenu000Name());
+			ps.setInt(9, bs.getMenu000Price());
+			ps.setString(10, bs.getMenu001Name());
+			ps.setInt(11, bs.getMenu001Price());
+			ps.setString(12, bs.getMenu002Name());
+			ps.setInt(13, bs.getMenu002Price());
+			ps.setInt(14, Id);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//Delete
+	public void deleteBranchShopById(Integer id)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "delete from king_shop.branch_shop where id = ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+}

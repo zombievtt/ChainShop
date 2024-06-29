@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+E:\javaOcp\HW4_009\Ex4Project\ChainShop\.metadata\.plugins\org.eclipse.jdt.core
+1943713220.index
+2912380435.index
+842110582.index
+1865797976.index

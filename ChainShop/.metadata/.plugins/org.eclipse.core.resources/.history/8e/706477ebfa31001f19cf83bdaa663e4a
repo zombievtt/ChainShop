@@ -1,0 +1,63 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Color;
+
+public class ShowAddBranchShop extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ShowAddBranchShop frame = new ShowAddBranchShop();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ShowAddBranchShop() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("新增分店");
+		setBounds(100, 100, 891, 682);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		
+		//將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panelBackgroundColor = new JPanel();
+		panelBackgroundColor.setBackground(new Color(255, 255, 0));
+		panelBackgroundColor.setBounds(10, 10, 165, 65);
+		contentPane.add(panelBackgroundColor);
+		panelBackgroundColor.setLayout(null);
+		
+		JLabel lbForegroundColor = new JLabel("New label");
+		lbForegroundColor.setBackground(new Color(255, 255, 0));
+		lbForegroundColor.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbForegroundColor.setHorizontalAlignment(SwingConstants.CENTER);
+		lbForegroundColor.setBounds(10, 10, 145, 45);
+		panelBackgroundColor.add(lbForegroundColor);
+	}
+}

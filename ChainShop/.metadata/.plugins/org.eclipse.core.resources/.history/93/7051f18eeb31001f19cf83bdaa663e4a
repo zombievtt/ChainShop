@@ -1,0 +1,114 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+
+public class StartManager extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	String strMIT = "<html>Copyright (C) 2024/06/24 <br/>"
+            + "Permission is hereby granted, free of charge, to any person obtaining a copy <br/>of this software and associated documentation files (the \\\"Software\\\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:<br/>"
+            + "Line 2 of text.<br/>"
+            + "Line 3 of text with a long sentence that will wrap automatically.</html>";
+	private String strTest = "Copyright (C) <year> <copyright holders>\r\n"
+			+ "\r\n"
+			+ "\r\n"
+			+ "\r\n"
+			+ "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\r\n"
+			+ "\r\n"
+			+ "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StartManager frame = new StartManager();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StartManager() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 388, 565);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JButton btnBranchShop = new JButton("分店管理");
+		btnBranchShop.setBounds(30, 50, 133, 46);
+		btnBranchShop.setFont(new Font("新細明體", Font.BOLD, 18));
+		contentPane.add(btnBranchShop);
+		
+		JLabel lblNewLabel = new JLabel("魔王炒麵店");
+		lblNewLabel.setBounds(30, 10, 302, 30);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("新細明體", Font.BOLD, 18));
+		contentPane.add(lblNewLabel);
+		
+		JButton btnEmployee = new JButton("員工");
+		btnEmployee.setBounds(30, 123, 133, 46);
+		btnEmployee.setFont(new Font("新細明體", Font.BOLD, 18));
+		contentPane.add(btnEmployee);
+		
+		JButton btnMember = new JButton("會員");
+		btnMember.setBounds(199, 50, 133, 46);
+		btnMember.setFont(new Font("新細明體", Font.BOLD, 18));
+		contentPane.add(btnMember);
+		
+		JButton btnBuyOrder = new JButton("訂單查詢");
+		btnBuyOrder.setBounds(198, 123, 133, 46);
+		btnBuyOrder.setFont(new Font("新細明體", Font.BOLD, 19));
+		contentPane.add(btnBuyOrder);
+		
+		JScrollPane spMit = new JScrollPane();
+		spMit.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		spMit.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		spMit.setBounds(30, 195, 302, 243);
+		contentPane.add(spMit);
+		
+		JTextArea txtArea = new JTextArea();
+		txtArea.setEditable(false);
+		spMit.setViewportView(txtArea);
+		txtArea.setFont(new Font("Monospaced", Font.BOLD, 18));
+		txtArea.setText(strMIT);
+		
+		JCheckBox checkBoxAgree = new JCheckBox("New check box");
+		checkBoxAgree.setEnabled(false);
+		checkBoxAgree.setFont(new Font("新細明體", Font.BOLD, 18));
+		checkBoxAgree.setHorizontalAlignment(SwingConstants.RIGHT);
+		checkBoxAgree.setBounds(138, 444, 228, 30);
+		contentPane.add(checkBoxAgree);
+		
+		JButton btnStartUp = new JButton("啟動");
+		btnStartUp.setEnabled(false);
+		btnStartUp.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnStartUp.setBounds(233, 480, 133, 38);
+		contentPane.add(btnStartUp);
+	}
+}

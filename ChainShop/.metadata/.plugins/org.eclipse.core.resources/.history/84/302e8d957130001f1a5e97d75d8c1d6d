@@ -1,0 +1,38 @@
+package dao.Impl;
+
+import java.sql.Connection;
+import java.util.List;
+
+import dao.DbConnection;
+import model.BranchShop;
+import model.BuyOrder;
+
+public class BranchShopDaoImpl {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	//Create
+	public void addBranchShopDaoImpl(BranchShop bs)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "insert into branch_shop(shop_name, back_r, back_g, back_b, fore_r, fore_g, fore_b, menu_000_name,  menu_000_price, menu_001_name, menu_001_price, menu_002_name, menu_002_price)"
+				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	}
+	
+	
+	//Read
+	public List<BranchShop> queryAll();
+	public List<BranchShop> queryAllByShopName(String shopName);
+	
+	
+	
+	//Update
+	public void updateBuyOrderShopById(BuyOrder bs, Integer Id);
+	
+	
+	//Delete
+	public void deleteBuyOrderById(Integer id);
+}

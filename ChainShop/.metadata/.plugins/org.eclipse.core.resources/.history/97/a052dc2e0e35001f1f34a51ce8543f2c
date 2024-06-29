@@ -1,0 +1,98 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import model.BranchShop;
+import model.BuyOrder;
+import model.Member;
+import service.Impl.BranchShopServiceImpl;
+import util.Cal;
+
+import javax.swing.JComboBox;
+import java.awt.Font;
+import java.util.List;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class BuyQueryOrderByMember extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private BuyOrder bo = null;
+	private List<BuyOrder> listBuyOrder = null;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+	private JComboBox cbShopNameList = null;
+	private List<BranchShop> listBranchShop = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BuyQueryOrderByMember frame = new BuyQueryOrderByMember();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BuyQueryOrderByMember() {
+		Member m = (Member)Cal.readFile("member.txt");
+		setTitle("會員查詢清單");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1111, 562);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// 將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+				
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		cbShopNameList = new JComboBox();
+		cbShopNameList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbShopNameList.setBounds(10, 10, 192, 42);
+		contentPane.add(cbShopNameList);
+		
+		JButton btnBack = new JButton("返回");
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BuyDlg bd = new BuyDlg();
+				bd.setVisible(true);
+				dispose();
+				
+			}
+		});
+		btnBack.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnBack.setBounds(893, 10, 192, 42);
+		contentPane.add(btnBack);
+		
+		listBranchShop = new BranchShopServiceImpl().queryAll();
+		cbShopNameList.addItem("全部");
+		for (BranchShop bs:listBranchShop)
+		{
+			cbShopNameList.addItem(bs.getShopName());
+		}
+		
+	}
+
+}

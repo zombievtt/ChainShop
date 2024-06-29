@@ -1,0 +1,198 @@
+
+		setTitle("編輯分店");
+
+		JSlider sliderBackG = new JSlider();
+		sliderBackG.setMaximum(255);		
+
+		JSlider sliderBackB = new JSlider();
+		sliderBackB.setMaximum(255);
+
+		JSlider sliderForeR = new JSlider();
+		sliderForeR.setMaximum(255);
+
+		JSlider sliderForeG = new JSlider();
+		sliderForeG.setMaximum(255);
+
+		JSlider sliderForeB = new JSlider();
+		sliderForeB.setMaximum(255);
+
+        //slider改變事件
+		ChangeListener clBack = new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Integer r = sliderBackR.getValue();
+				Integer g = sliderBackG.getValue();
+				Integer b = sliderBackB.getValue();
+
+				lbBackR.setText(r.toString());
+				lbBackG.setText(g.toString());
+				lbBackB.setText(b.toString());
+
+				Color c = new Color(r, g, b);
+				panelBackgroundColor.setBackground(c);
+
+			}
+		};
+
+		sliderBackR.addChangeListener(clBack);
+		sliderBackG.addChangeListener(clBack);
+		sliderBackB.addChangeListener(clBack);
+
+        //預設值
+		lbForeR.setText("0");
+		lbForeG.setText("0");
+		lbForeB.setText("0");
+		sliderForeR.setValue(0);
+		sliderForeG.setValue(0);
+		sliderForeB.setValue(0);
+
+		JComboBox cbShopNameList = new JComboBox();
+
+        //取得所有分店資訊
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() instanceof JComboBox) {
+					//JComboBox選擇事件
+
+					//取得想編輯的分店名稱
+					String strShopName = cbShopNameList.getSelectedItem().toString();
+
+					//取得想編輯的分店資訊
+					List<BranchShop> l = new BranchShopServiceImpl().queryAllByShopName(strShopName);
+
+					//UI顯示想編輯的分店資訊
+					BranchShop bs = l.get(0);
+					sliderBackR.setValue(bs.getBackR());
+					sliderBackG.setValue(bs.getBackG());
+					sliderBackB.setValue(bs.getBackB());
+					sliderForeR.setValue(bs.getForeR());
+					sliderForeG.setValue(bs.getForeG());
+					sliderForeB.setValue(bs.getForeB());
+					lbBackR.setText(bs.getBackR().toString());
+					lbBackG.setText(bs.getBackG().toString());
+					lbBackB.setText(bs.getBackB().toString());
+					lbForeR.setText(bs.getForeR().toString());
+					lbForeG.setText(bs.getForeG().toString());
+					lbForeB.setText(bs.getForeB().toString());
+					menu000Name.setText(bs.getMenu000Name());
+					menu001Name.setText(bs.getMenu001Name());
+					menu002Name.setText(bs.getMenu002Name());
+					menu000Price.setText(bs.getMenu000Price().toString());
+					menu001Price.setText(bs.getMenu001Price().toString());
+					menu002Price.setText(bs.getMenu002Price().toString());
+					Color cBack = new Color(bs.getBackR(), bs.getBackG(), bs.getBackB());
+					Color cFore = new Color(bs.getForeR(), bs.getForeG(), bs.getForeB());
+
+					panelBackgroundColor.setBackground(cBack);
+					lbForegroundColor.setForeground(cFore);
+
+				}
+
+			}
+		};
+
+        //載入所有分店名稱成列表
+		if (l.size() > 0) {
+			for (BranchShop b : l) {
+				cbShopNameList.addItem(b.getShopName());
+			}
+
+			cbShopNameList.addActionListener(actionListener);
+			cbShopNameList.setSelectedIndex(0);
+		}
+		
+        //slider改變事件
+		ChangeListener clFore = new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Integer r = sliderForeR.getValue();
+				Integer g = sliderForeG.getValue();
+				Integer b = sliderForeB.getValue();
+
+				lbForeR.setText(r.toString());
+				lbForeG.setText(g.toString());
+				lbForeB.setText(b.toString());
+
+				Color c = new Color(r, g, b);
+				lbForegroundColor.setForeground(c);
+			}
+		};
+
+		sliderForeR.addChangeListener(clFore);
+		sliderForeG.addChangeListener(clFore);
+		sliderForeB.addChangeListener(clFore);
+
+		// 只能輸入數字
+		KeyAdapter ka = new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				int keyChar = e.getKeyChar();
+				if (keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9) {
+				} else {
+					// 禁用鍵盤事件傳遞
+					e.consume();
+				}
+			}
+		};
+		menu000Price.addKeyListener(ka);
+		menu001Price.addKeyListener(ka);
+		menu002Price.addKeyListener(ka);
+
+        //每隔一秒取得時間
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new JLabelTimerTask(), new Date(), ONE_SECOND);
+
+		JButton btnOK = new JButton("確定");
+		btnOK.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Integer size = cbShopNameList.getItemCount();
+				if (size.equals(0)) {
+					JOptionPane.showMessageDialog(null, "沒有分店可以編輯.", "編輯分店", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+
+				//取得想編輯的分店名稱
+				String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+
+                //取得想編輯的分店資訊
+				List<BranchShop> l = new BranchShopServiceImpl().queryAllByShopName(strShopName);
+				BranchShop bs = l.get(0);
+				Integer id = bs.getId();
+
+				// 取得編輯資訊
+				bs.setBackR(Integer.parseInt(lbBackR.getText()));
+				bs.setBackG(Integer.parseInt(lbBackG.getText()));
+				bs.setBackB(Integer.parseInt(lbBackB.getText()));
+				bs.setForeR(Integer.parseInt(lbForeR.getText()));
+				bs.setForeG(Integer.parseInt(lbForeG.getText()));
+				bs.setForeB(Integer.parseInt(lbForeB.getText()));
+				bs.setMenu000Name(menu000Name.getText());
+				bs.setMenu001Name(menu001Name.getText());
+				bs.setMenu002Name(menu002Name.getText());
+				bs.setMenu000Price(Integer.parseInt(menu000Price.getText()));
+				bs.setMenu001Price(Integer.parseInt(menu001Price.getText()));
+				bs.setMenu002Price(Integer.parseInt(menu002Price.getText()));
+
+                //更新編輯資訊
+				new BranchShopServiceImpl().updateBranchShopById(bs, id);
+				JOptionPane.showMessageDialog(null, "編輯資訊更新成功.", "編輯分店", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
+
+    //顯示時間
+	protected class JLabelTimerTask extends TimerTask {
+		SimpleDateFormat sdf = new SimpleDateFormat(DTF);
+
+		@Override
+		public void run() {
+			String strDateTime = sdf.format(Calendar.getInstance().getTime());
+			lbDateTime.setText(strDateTime);
+		}
+	}
+

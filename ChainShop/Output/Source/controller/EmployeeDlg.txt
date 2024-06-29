@@ -1,0 +1,162 @@
+public class EmployeeDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JComboBox cbMemberOrderStateList;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+
+	
+	public EmployeeDlg() {
+
+		//讀取該登入員工資訊
+		Employee employee = (Employee)Cal.readFile("employee.txt");
+		setTitle("員工處理訂單狀態");
+
+	    //顯示該登入員工所屬分店名稱	
+		JLabel lbShopName = new JLabel("------");
+		lbShopName.setText(employee.getShopName());
+		
+		//顯示該登入員工名
+		JLabel lbEmployeeName = new JLabel("------");
+		lbEmployeeName.setText("員工:" + employee.getName());
+		
+		//載入訂單狀態選項
+		cbMemberOrderStateList = new JComboBox();
+		cbMemberOrderStateList.addItem(BuyState.strUnread);
+		cbMemberOrderStateList.addItem(BuyState.strPreparing);
+		cbMemberOrderStateList.addItem(BuyState.strPickUp);
+		cbMemberOrderStateList.addItem(BuyState.strPickUped);
+		cbMemberOrderStateList.addItem(BuyState.strCallOff);
+		
+		//重新整理
+		JButton btnRefresh = new JButton("重新整理");
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				RefreshHistoryOrder();
+			}
+		});
+		
+		//使用精靈新增一列表格 與資料表order_buy相對應
+		model = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"id", "\u540D", "\u5E33\u865F", "\u5BC6\u78BC", "\u5206\u5E97\u540D", "\u83DCA\u540D", "\u83DCA\u6578\u91CF", "\u83DCA\u50F9\u683C", "\u83DCB\u540D", "\u83DCB\u50F9\u683C", "\u83DCB\u6578\u91CF", "\u83DCC\u540D", "\u83DCC\u50F9\u683C", "\u83DCC\u6578\u91CF", "\u5C0F\u8A08", "\u65E5\u671F", "\u6642\u9593", "\u8A02\u55AE\u72C0\u614B"
+				}
+			);	
+		tableHistory = new JTable(model);
+
+		//JTable選擇事件
+		tableHistory.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				//不做事
+			}
+			
+		});
+
+		//JTable 加上捲軸
+		jScroll = new JScrollPane(tableHistory, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		jScroll.setBounds(10, 106, 1247, 421);
+		
+		//當按下按鈕, 訂單狀態更新
+		JButton btnUpdateState = new JButton("該訂單狀態更新");
+		btnUpdateState.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//取得登入員工資訊
+				Employee employee = (Employee)Cal.readFile("employee.txt");
+
+				//取得登入員工所屬分店的訂單
+				List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAllByShopName(employee.getShopName());
+				
+				//取得想更新的訂單狀態
+				String strState = cbMemberOrderStateList.getSelectedItem().toString().trim();
+
+				//所選取的列
+				int[] rows = tableHistory.getSelectedRows();
+				for (BuyOrder bo:listBuyOrder)
+				{
+					
+				}
+
+				//所選取的列都更新訂單狀態
+				for (int i:rows)
+				{
+					tableHistory.setValueAt(strState, i, 17);
+					String id = tableHistory.getValueAt(i, 0).toString();
+					new BuyOrderServiceImpl().updateBuyOrderShopById(strState, Integer.parseInt(id));
+					System.out.println("id:"+id+" state:"+strState);
+				}
+				
+			}
+		});
+		
+		
+		//設定分店名稱索引值為零
+		cbMemberOrderStateList.setSelectedIndex(0);
+		
+		//重新整理 該員工所屬的分店歷史訂單
+		RefreshHistoryOrder();
+		
+		
+		       
+		
+	}
+	
+	//列出該員工所屬分店的歷史訂單
+	private void RefreshHistoryOrder()
+	{
+		//先移除所有的列
+		for (int i = model.getRowCount()-1; i >= 0; i--)
+		{
+			model.removeRow(i);
+		}
+		
+		//取得登入員工資訊
+		Employee employee = (Employee)Cal.readFile("employee.txt");
+
+		//取得該員工所屬分店的歷史訂單
+		List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAllByShopName(employee.getShopName());
+		
+		//將歷史訂單加入表格
+		for (BuyOrder bo: listBuyOrder)
+		{
+			Vector<String> row = new Vector<String>();
+        	row.add(bo.getId().toString());
+        	row.add(bo.getMemberName());
+        	row.add(bo.getMemberAccount());
+        	row.add(bo.getMemberPassword());
+        	row.add(bo.getShopName());
+        	row.add(bo.getMenu000Name());
+        	row.add(bo.getMenu000Price().toString() + "元");
+        	row.add(bo.getMenu000Count().toString() + "份");
+        	row.add(bo.getMenu001Name());
+        	row.add(bo.getMenu001Price().toString() + "元");
+        	row.add(bo.getMenu001Count().toString() + "份");
+        	row.add(bo.getMenu002Name());
+        	row.add(bo.getMenu002Price().toString() + "元");
+        	row.add(bo.getMenu002Count().toString() + "份");
+        	row.add(bo.getBuySum().toString() + "元");
+        	row.add(bo.getBuyDate());
+        	row.add(bo.getBuyTime());
+        	row.add(bo.getBuyState());
+        	
+        	model.addRow(row);
+		}
+	
+			
+		//Table 欄位內容置中
+		for (int i = model.getColumnCount()-1; i >= 0; i--)
+		{
+			TableColumn column = tableHistory.getColumnModel().getColumn(i);
+			DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+			render.setHorizontalAlignment(SwingConstants.CENTER);
+			column.setCellRenderer(render);
+		}
+	}
+}

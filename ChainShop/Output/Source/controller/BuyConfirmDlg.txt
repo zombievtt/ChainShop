@@ -1,0 +1,73 @@
+setTitle("確認訂單");
+
+// 將視窗位置設置在正中央
+setLocationRelativeTo(contentPane);
+
+//確認訂單需讀取訂單資訊
+BuyOrder bo = (BuyOrder)Cal.readFile("buyOrder.txt");
+Member m = (Member)Cal.readFile("member.txt");
+String strShow = (String)Cal.readFile("totalMoney.txt");
+JLabel lbName = new JLabel("------");
+lbName.setText(m.getName());
+
+
+//新增訂單
+JButton btnOK = new JButton("確定");
+btnOK.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		new BuyOrderServiceImpl().addBuyOrder(bo);
+		JOptionPane.showMessageDialog(null, "新增訂單成功", "確認訂單", JOptionPane.WARNING_MESSAGE);
+		BuyDlg bdBuy = new BuyDlg();
+		bdBuy.setVisible(true);
+		dispose();
+	}
+});
+
+//取得該分店資訊
+List<BranchShop> l = new BranchShopServiceImpl().queryAllByShopName(bo.getShopName());
+if (l.size() <= 0)
+{
+	JOptionPane.showMessageDialog(null, "這筆訂單缺少該分店名稱", "確認訂單", JOptionPane.WARNING_MESSAGE);
+	return;
+}
+
+//設置分店背景顏色與文字顏色 在下訂單與確認訂單 編輯分店會用到
+BranchShop bs = l.get(0);
+Color cBack = new Color(bs.getBackR(), bs.getBackG(), bs.getBackB());
+Color cFore = new Color(bs.getForeR(), bs.getForeG(), bs.getForeB());
+contentPane.setBackground(cBack);
+lbName.setForeground(cFore);
+lbYour.setForeground(cFore);
+lbDateTime.setForeground(cFore);
+lbShopName.setForeground(cFore);
+lbMenu000Name.setForeground(cFore);
+lbMenu001Name.setForeground(cFore);
+lbMenu002Name.setForeground(cFore);
+lbMenu000Price.setForeground(cFore);
+lbMenu001Price.setForeground(cFore);
+lbMenu002Price.setForeground(cFore);
+lbMenu000Count.setForeground(cFore);
+lbMenu001Count.setForeground(cFore);
+lbMenu002Count.setForeground(cFore);
+lbMenu000Unit.setForeground(cFore);
+lbMenu001Unit.setForeground(cFore);
+lbMenu002Unit.setForeground(cFore);
+lbTotal.setForeground(cFore);
+
+//設定顯示確認資訊	
+lbName.setText(bo.getMemberName());
+lbDateTime.setText(bo.getBuyDate() + " " + bo.getBuyTime());
+lbShopName.setText(bo.getShopName());
+lbMenu000Name.setText(bo.getMenu000Name());
+lbMenu001Name.setText(bo.getMenu001Name());
+lbMenu002Name.setText(bo.getMenu002Name());
+lbMenu000Price.setText(bo.getMenu000Price().toString());
+lbMenu001Price.setText(bo.getMenu001Price().toString());
+lbMenu002Price.setText(bo.getMenu002Price().toString());
+lbMenu000Count.setText(bo.getMenu000Count().toString());
+lbMenu001Count.setText(bo.getMenu001Count().toString());
+lbMenu002Count.setText(bo.getMenu002Count().toString());
+
+lbTotal.setText("共: " + bo.getBuySum()+ "元");
+

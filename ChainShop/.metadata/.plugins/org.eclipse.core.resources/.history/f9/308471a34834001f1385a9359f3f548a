@@ -1,0 +1,278 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import controller.ShowAddBranchShop.JLabelTimerTask;
+import model.BranchShop;
+import service.Impl.BranchShopServiceImpl;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+
+public class BuyDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField menu000Count;
+	private JTextField menu001Count;
+	private JTextField menu002Count;
+	private JLabel lbDateTime;
+	private String DTF = "yyyy-MM-dd HH:mm:ss";
+	private String strDateTime = "";
+    private final int ONE_SECOND = 1000;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BuyDlg frame = new BuyDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BuyDlg() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1095, 651);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		//將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+		
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel menu000Name = new JLabel("------");
+		menu000Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Name.setBounds(10, 10, 144, 47);
+		contentPane.add(menu000Name);
+		
+		JLabel menu001Name = new JLabel("------");
+		menu001Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu001Name.setBounds(10, 90, 144, 47);
+		contentPane.add(menu001Name);
+		
+		JLabel menu002Name = new JLabel("------");
+		menu002Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu002Name.setBounds(10, 180, 144, 47);
+		contentPane.add(menu002Name);
+		
+		JLabel menu000Price = new JLabel("------");
+		menu000Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Price.setBounds(187, 10, 144, 47);
+		contentPane.add(menu000Price);
+		
+		JLabel menu001Price = new JLabel("------");
+		menu001Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu001Price.setBounds(187, 90, 144, 47);
+		contentPane.add(menu001Price);
+		
+		JLabel menu002Price = new JLabel("------");
+		menu002Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu002Price.setBounds(187, 180, 144, 47);
+		contentPane.add(menu002Price);
+		
+		JLabel lb000 = new JLabel("元");
+		lb000.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb000.setBounds(349, 10, 46, 47);
+		contentPane.add(lb000);
+		
+		JLabel lb001 = new JLabel("元");
+		lb001.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb001.setBounds(349, 90, 46, 47);
+		contentPane.add(lb001);
+		
+		JLabel lb002 = new JLabel("元");
+		lb002.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb002.setBounds(349, 180, 46, 47);
+		contentPane.add(lb002);
+		
+		menu000Count = new JTextField();
+		menu000Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu000Count.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Count.setBounds(417, 11, 132, 47);
+		contentPane.add(menu000Count);
+		menu000Count.setColumns(10);
+		
+		menu001Count = new JTextField();
+		menu001Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu001Count.setBounds(417, 90, 132, 47);
+		contentPane.add(menu001Count);
+		menu001Count.setColumns(10);
+		
+		menu002Count = new JTextField();
+		menu002Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu002Count.setBounds(417, 180, 132, 47);
+		contentPane.add(menu002Count);
+		menu002Count.setColumns(10);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(0, 255, 255));
+		panel.setBounds(616, 10, 455, 47);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		lbDateTime = new JLabel("------");
+		lbDateTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lbDateTime.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbDateTime.setForeground(new Color(0, 0, 255));
+		lbDateTime.setBounds(0, 0, 455, 47);
+		panel.add(lbDateTime);
+		
+		JComboBox cbShopNameList = new JComboBox();
+		cbShopNameList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbShopNameList.setBounds(616, 90, 217, 47);
+		contentPane.add(cbShopNameList);
+		
+		JButton btnTotal = new JButton("總額");
+		btnTotal.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnTotal.setBounds(10, 279, 91, 47);
+		contentPane.add(btnTotal);	
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true);//自動換列
+		textArea.setEditable(false);
+		textArea.setFont(new Font("Monospaced", Font.BOLD, 18));
+		textArea.setText("");
+		
+		JScrollPane spTotal = new JScrollPane(textArea);
+		spTotal.setBounds(118, 279, 418, 287);
+		spTotal.setViewportView(textArea);
+		contentPane.add(spTotal);
+		
+		JButton btnOK = new JButton("確定");
+		btnOK.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnOK.setBounds(912, 519, 159, 47);
+		contentPane.add(btnOK);
+		
+		JButton btnCancel = new JButton("取消");
+		btnCancel.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnCancel.setBounds(720, 519, 159, 47);
+		contentPane.add(btnCancel);
+		
+		JLabel lbCount000 = new JLabel("份");
+		lbCount000.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbCount000.setBounds(560, 10, 46, 47);
+		contentPane.add(lbCount000);
+		
+		JLabel lbCount001 = new JLabel("份");
+		lbCount001.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbCount001.setBounds(560, 91, 46, 46);
+		contentPane.add(lbCount001);
+		
+		JLabel lblCount002 = new JLabel("份");
+		lblCount002.setFont(new Font("新細明體", Font.BOLD, 18));
+		lblCount002.setBounds(559, 182, 46, 45);
+		contentPane.add(lblCount002);
+		
+		
+		
+		//只能輸入數字
+        KeyAdapter ka = new KeyAdapter(){
+            public void keyTyped(KeyEvent e) {
+                int keyChar = e.getKeyChar();
+                if (keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9) {
+                }
+                else
+        	    {
+                    //禁用鍵盤事件傳遞
+        	        e.consume();
+        	    }
+            }
+        };
+        
+        menu000Count.addKeyListener(ka);
+        menu001Count.addKeyListener(ka);
+        menu002Count.addKeyListener(ka);
+        
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new JLabelTimerTask(), new Date(), ONE_SECOND);
+        
+        //載入分店名稱
+        Integer size = cbShopNameList.getItemCount();
+		if (size.equals(0))
+		{
+			JOptionPane.showMessageDialog(null,"沒有分店可以選擇","下訂單",JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+		
+		List<BranchShop> l = new BranchShopServiceImpl().queryAllByShopName(strShopName);
+		BranchShop bs = l.get(0);
+		Integer id = bs.getId();
+		
+//		//載入分店資訊
+//		bs.setBackR(Integer.parseInt(lbBackR.getText()));
+//		bs.setBackG(Integer.parseInt(lbBackG.getText()));
+//		bs.setBackB(Integer.parseInt(lbBackB.getText()));
+//		bs.setForeR(Integer.parseInt(lbForeR.getText()));
+//		bs.setForeG(Integer.parseInt(lbForeG.getText()));
+//		bs.setForeB(Integer.parseInt(lbForeB.getText()));
+//		bs.setMenu000Name(menu000Name.getText());
+//		bs.setMenu001Name(menu001Name.getText());
+//		bs.setMenu002Name(menu002Name.getText());
+//		bs.setMenu000Price(Integer.parseInt(menu000Price.getText()));
+//		bs.setMenu001Price(Integer.parseInt(menu001Price.getText()));
+//		bs.setMenu002Price(Integer.parseInt(menu002Price.getText()));
+		
+		//new BranchShopServiceImpl().updateBranchShopById(bs, id);
+		Color cBack = new Color(bs.getBackR(), bs.getBackG(), bs.getBackB());
+		Color cFore = new Color(bs.getForeR(), bs.getForeG(), bs.getForeB());
+		
+		contentPane.setBackground(cBack);
+		menu000Name.setForeground(cFore);
+		menu001Name.setForeground(cFore);
+		menu002Name.setForeground(cFore);
+		menu000Price.setForeground(cFore);
+		menu001Price.setForeground(cFore);
+		menu002Price.setForeground(cFore);
+		lb000.setForeground(cFore);
+		lb001.setForeground(cFore);
+		lb002.setForeground(cFore);
+		
+		
+        
+	}
+	
+	protected class JLabelTimerTask extends TimerTask
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat(DTF);
+
+		@Override
+		public void run() {
+			String strDateTime = sdf.format(Calendar.getInstance().getTime());
+			lbDateTime.setText(strDateTime);
+		}
+	}
+}

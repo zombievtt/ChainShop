@@ -1,0 +1,37 @@
+public OrderLoginManager() {
+	setTitle("訂單管理登入");
+	
+	JButton btnLogin = new JButton();
+	btnLogin.setText("登入");
+	btnLogin.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			String strAccount = account.getText();
+			String strPassword = password.getText();
+			if (strAccount.isEmpty() ||
+				strPassword.isEmpty())
+			{
+				JOptionPane.showMessageDialog(null,"欄位不可為空白","訂單管理登入",JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			//比對訂單管理功能帳密
+			if (strAccount.equals("root") && 
+				strPassword.equals("root")
+				)
+			{
+				//前往訂單列表介面
+				OrderListDlg dlg = new OrderListDlg();
+				dlg.setVisible(true);
+				dispose();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null,"帳號或密碼錯誤","訂單管理登入",JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	});
+	
+}
+
+

@@ -1,0 +1,83 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class BuyConfirmDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BuyConfirmDlg frame = new BuyConfirmDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BuyConfirmDlg() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 485, 537);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lbName = new JLabel("------");
+		lbName.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbName.setBounds(10, 10, 124, 40);
+		contentPane.add(lbName);
+		
+		JLabel lbYour = new JLabel(", 您的訂單資訊如下");
+		lbYour.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbYour.setBounds(144, 10, 317, 40);
+		contentPane.add(lbYour);
+		
+		JLabel lbOrderInformation = new JLabel("");
+		lbOrderInformation.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbOrderInformation.setVerticalAlignment(SwingConstants.TOP);
+		lbOrderInformation.setBounds(10, 74, 451, 339);
+		contentPane.add(lbOrderInformation);
+		
+		JButton btnOK = new JButton("確定");
+		btnOK.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnOK.setBounds(301, 434, 160, 50);
+		contentPane.add(btnOK);
+		
+		JButton btnCancel = new JButton("取消");
+		btnCancel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BuyDlg bd = new BuyDlg();
+				bd.setVisible(true);
+				dispose();
+			}
+		});
+		btnCancel.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnCancel.setBounds(114, 435, 160, 48);
+		contentPane.add(btnCancel);
+	}
+
+}

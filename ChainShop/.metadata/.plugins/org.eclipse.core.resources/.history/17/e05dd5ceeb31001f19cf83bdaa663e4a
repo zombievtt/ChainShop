@@ -1,0 +1,70 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+public class ShowAgreeMIT extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ShowAgreeMIT frame = new ShowAgreeMIT();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ShowAgreeMIT() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 695);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 10, 416, 529);
+		contentPane.add(scrollPane);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setFont(new Font("新細明體", Font.BOLD, 15));
+		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
+		scrollPane.setViewportView(lblNewLabel);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("我同意");
+		chckbxNewCheckBox.setEnabled(false);
+		chckbxNewCheckBox.setFont(new Font("新細明體", Font.BOLD, 18));
+		chckbxNewCheckBox.setBounds(248, 556, 178, 39);
+		contentPane.add(chckbxNewCheckBox);
+		
+		JButton btnUseIt = new JButton("開始使用");
+		btnUseIt.setEnabled(false);
+		btnUseIt.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnUseIt.setBounds(248, 607, 178, 41);
+		contentPane.add(btnUseIt);
+	}
+
+}

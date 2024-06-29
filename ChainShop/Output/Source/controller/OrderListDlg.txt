@@ -1,0 +1,146 @@
+
+
+public class OrderListDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private BuyOrder bo = null;
+	private List<BuyOrder> listBuyOrder = null;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+	private JComboBox cbShopNameList = null;
+	private List<BranchShop> listBranchShop = null;
+
+	public OrderListDlg() {
+		
+		setTitle("訂單查詢");
+
+		cbShopNameList = new JComboBox();
+		
+		//取得所有分店資訊
+		listBranchShop = new BranchShopServiceImpl().queryAll();
+
+		//新增分店選單資訊
+		cbShopNameList.addItem("全部");
+		for (BranchShop bs:listBranchShop)
+		{
+			cbShopNameList.addItem(bs.getShopName());
+		}
+		
+		//使用精靈新增一列表格 與資料表order_buy相對應
+		model = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"id", "\u540D", "\u5E33\u865F", "\u5BC6\u78BC", "\u5206\u5E97\u540D", "\u83DCA\u540D", "\u83DCA\u6578\u91CF", "\u83DCA\u50F9\u683C", "\u83DCB\u540D", "\u83DCB\u50F9\u683C", "\u83DCB\u6578\u91CF", "\u83DCC\u540D", "\u83DCC\u50F9\u683C", "\u83DCC\u6578\u91CF", "\u5C0F\u8A08", "\u65E5\u671F", "\u6642\u9593", "\u8A02\u55AE\u72C0\u614B"
+				}
+			);
+		
+		tableHistory = new JTable(model);
+		tableHistory.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        tableHistory.setBounds(0, 0, 881, 379);
+        
+		//表格加入卷軸
+        JScrollPane scrollPane = new JScrollPane(tableHistory, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(10, 57, 1249, 403);
+		
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 獲取分店名稱
+				String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+
+				// 查詢分店資訊
+				if (strShopName.equals("全部"))
+				{
+					
+					//先移除所有的列
+					for (int i = model.getRowCount()-1; i >= 0; i--)
+					{
+						model.removeRow(i);
+					}
+
+					//列出所有分店的歷史訂單
+					List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAll();
+					for (BuyOrder bo: listBuyOrder)
+					{
+						Vector<String> row = new Vector<String>();
+			        	row.add(bo.getId().toString());
+			        	row.add(bo.getMemberName());
+			        	row.add(bo.getMemberAccount());
+			        	row.add(bo.getMemberPassword());
+			        	row.add(bo.getShopName());
+			        	row.add(bo.getMenu000Name());
+			        	row.add(bo.getMenu000Price().toString() + "元");
+			        	row.add(bo.getMenu000Count().toString() + "份");
+			        	row.add(bo.getMenu001Name());
+			        	row.add(bo.getMenu001Price().toString() + "元");
+			        	row.add(bo.getMenu001Count().toString() + "份");
+			        	row.add(bo.getMenu002Name());
+			        	row.add(bo.getMenu002Price().toString() + "元");
+			        	row.add(bo.getMenu002Count().toString() + "份");
+			        	row.add(bo.getBuySum().toString() + "元");
+			        	row.add(bo.getBuyDate());
+			        	row.add(bo.getBuyTime());
+			        	row.add(bo.getBuyState());
+			        	
+			        	model.addRow(row);
+					}
+				}
+				else
+				{
+					//先移除所有的列
+					for (int i = model.getRowCount()-1; i >= 0; i--)
+					{
+						model.removeRow(i);
+					}
+
+					//列出該分店的歷史訂單
+					List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAllByShopName(strShopName);
+					for (BuyOrder bo: listBuyOrder)
+					{
+						Vector<String> row = new Vector<String>();
+			        	row.add(bo.getId().toString());
+			        	row.add(bo.getMemberName());
+			        	row.add(bo.getMemberAccount());
+			        	row.add(bo.getMemberPassword());
+			        	row.add(bo.getShopName());
+			        	row.add(bo.getMenu000Name());
+			        	row.add(bo.getMenu000Price().toString() + "元");
+			        	row.add(bo.getMenu000Count().toString() + "份");
+			        	row.add(bo.getMenu001Name());
+			        	row.add(bo.getMenu001Price().toString() + "元");
+			        	row.add(bo.getMenu001Count().toString() + "份");
+			        	row.add(bo.getMenu002Name());
+			        	row.add(bo.getMenu002Price().toString() + "元");
+			        	row.add(bo.getMenu002Count().toString() + "份");
+			        	row.add(bo.getBuySum().toString() + "元");
+			        	row.add(bo.getBuyDate());
+			        	row.add(bo.getBuyTime());
+			        	row.add(bo.getBuyState());
+			        	
+			        	model.addRow(row);
+					}
+				}
+				
+				//將表格欄位內容置中
+				for (int i = model.getColumnCount()-1; i >= 0; i--)
+				{
+					TableColumn column = tableHistory.getColumnModel().getColumn(i);
+					DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+					render.setHorizontalAlignment(SwingConstants.CENTER);
+					column.setCellRenderer(render);
+				}
+				
+			}
+		};
+		
+		//加入選擇事件
+		cbShopNameList.addActionListener(actionListener);
+
+		//預設索引值為零
+		cbShopNameList.setSelectedIndex(0);
+		
+	}
+}

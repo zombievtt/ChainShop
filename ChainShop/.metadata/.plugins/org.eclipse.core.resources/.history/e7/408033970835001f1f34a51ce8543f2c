@@ -1,0 +1,447 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import controller.ShowAddBranchShop.JLabelTimerTask;
+import dao.Impl.BuyState;
+import model.BranchShop;
+import model.BuyOrder;
+import model.Member;
+import service.Impl.BranchShopServiceImpl;
+import util.Cal;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ScrollPaneConstants;
+
+public class BuyDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JComboBox cbShopNameList;
+	private JTextField menu000Count;
+	private JTextField menu001Count;
+	private JTextField menu002Count;
+	private JLabel lb000, lb001, lb002;
+	private JLabel menu000Name, menu001Name, menu002Name;
+	private JLabel menu000Price, menu001Price, menu002Price;
+	private JLabel lbCount000, lbCount001, lbCount002;
+	private JLabel lbDateTime;
+	private JTextArea textArea;
+	private JScrollPane spTotal;
+	private String DTF = "yyyy-MM-dd HH:mm:ss";
+	private String strDateTime = "";
+	private final int ONE_SECOND = 1000;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BuyDlg frame = new BuyDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BuyDlg() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 909, 552);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// 將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		menu000Name = new JLabel("------");
+		menu000Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Name.setBounds(10, 10, 144, 47);
+		contentPane.add(menu000Name);
+
+		menu001Name = new JLabel("------");
+		menu001Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu001Name.setBounds(10, 70, 144, 47);
+		contentPane.add(menu001Name);
+
+		menu002Name = new JLabel("------");
+		menu002Name.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu002Name.setBounds(10, 130, 144, 47);
+		contentPane.add(menu002Name);
+
+		menu000Price = new JLabel("------");
+		menu000Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Price.setBounds(187, 10, 90, 47);
+		contentPane.add(menu000Price);
+
+		menu001Price = new JLabel("------");
+		menu001Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu001Price.setBounds(187, 70, 90, 47);
+		contentPane.add(menu001Price);
+
+		menu002Price = new JLabel("------");
+		menu002Price.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu002Price.setBounds(187, 130, 90, 47);
+		contentPane.add(menu002Price);
+
+		lb000 = new JLabel("元");
+		lb000.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb000.setBounds(287, 10, 46, 47);
+		contentPane.add(lb000);
+
+		lb001 = new JLabel("元");
+		lb001.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb001.setBounds(287, 70, 46, 47);
+		contentPane.add(lb001);
+
+		lb002 = new JLabel("元");
+		lb002.setFont(new Font("新細明體", Font.BOLD, 18));
+		lb002.setBounds(287, 130, 46, 47);
+		contentPane.add(lb002);
+
+		menu000Count = new JTextField();
+		menu000Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu000Count.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu000Count.setBounds(343, 10, 132, 47);
+		contentPane.add(menu000Count);
+		menu000Count.setColumns(10);
+
+		menu001Count = new JTextField();
+		menu001Count.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu001Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu001Count.setBounds(343, 70, 132, 47);
+		contentPane.add(menu001Count);
+		menu001Count.setColumns(10);
+
+		menu002Count = new JTextField();
+		menu002Count.setFont(new Font("新細明體", Font.BOLD, 18));
+		menu002Count.setHorizontalAlignment(SwingConstants.CENTER);
+		menu002Count.setBounds(343, 130, 132, 47);
+		contentPane.add(menu002Count);
+		menu002Count.setColumns(10);
+
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(0, 255, 255));
+		panel.setBounds(616, 10, 250, 47);
+		contentPane.add(panel);
+		panel.setLayout(null);
+
+		lbDateTime = new JLabel("------");
+		lbDateTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lbDateTime.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbDateTime.setForeground(new Color(0, 0, 255));
+		lbDateTime.setBounds(0, 0, 250, 47);
+		panel.add(lbDateTime);
+
+		cbShopNameList = new JComboBox();
+		cbShopNameList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbShopNameList.setBounds(616, 70, 250, 47);
+		contentPane.add(cbShopNameList);
+
+		JButton btnTotal = new JButton("總額");
+		btnTotal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				boolean bSuccess = checkField();
+				if (false == bSuccess)
+				{
+					return;
+				}
+				
+				printInfo();
+			}
+		});
+		btnTotal.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnTotal.setBounds(10, 205, 91, 47);
+		contentPane.add(btnTotal);
+
+		textArea = new JTextArea();
+		textArea.setLineWrap(true);// 自動換列
+		textArea.setEditable(false);
+		textArea.setFont(new Font("Monospaced", Font.BOLD, 18));
+		textArea.setText("");
+		
+		spTotal = new JScrollPane(textArea);
+		spTotal.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		spTotal.setBounds(118, 205, 577, 287);
+		spTotal.setViewportView(textArea);
+		contentPane.add(spTotal);
+
+		JButton btnOK = new JButton("確定");
+		btnOK.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				boolean bSuccess = checkField();
+				if (false == bSuccess)
+				{
+					return;
+				}
+				printInfo();
+				Member m = (Member) Cal.readFile("member.txt");
+				BranchShop bs = (BranchShop) Cal.readFile("branchShop.txt");
+				BuyOrder bo = new BuyOrder();
+				bo.setMemberName(m.getName());
+				bo.setMemberAccount(m.getAccount());
+				bo.setMemberPassword(m.getPassword());
+				bo.setShopName(bs.getShopName());
+				bo.setMenu000Name(bs.getMenu000Name());
+				bo.setMenu001Name(bs.getMenu001Name());
+				bo.setMenu002Name(bs.getMenu002Name());
+
+				Integer iMenu000Price = bs.getMenu000Price();
+				Integer iMenu001Price = bs.getMenu001Price();
+				Integer iMenu002Price = bs.getMenu002Price();
+				bo.setMenu000Price(iMenu000Price);
+				bo.setMenu001Price(iMenu001Price);
+				bo.setMenu002Price(iMenu002Price);
+
+				Integer iMenu000Count = Integer.parseInt(menu000Count.getText());
+				Integer iMenu001Count = Integer.parseInt(menu001Count.getText());
+				Integer iMenu002Count = Integer.parseInt(menu002Count.getText());
+				bo.setMenu000Count(iMenu000Count);
+				bo.setMenu001Count(iMenu001Count);
+				bo.setMenu002Count(iMenu002Count);
+
+				Integer iSum = iMenu000Price*iMenu000Count + 
+						       iMenu001Price*iMenu001Count + 
+						       iMenu002Price*iMenu002Count;
+				bo.setBuySum(iSum);
+
+				String DF = "yyyy-MM-dd";
+				String TF = "HH:mm:ss";
+				String strDate = "";
+				String strTime = "";
+				SimpleDateFormat sdfDate = new SimpleDateFormat(DF);
+				SimpleDateFormat sdfTime = new SimpleDateFormat(TF);
+				strDate = sdfDate.format(Calendar.getInstance().getTime());
+				strTime = sdfTime.format(Calendar.getInstance().getTime());
+				bo.setBuyDate(strDate);
+				bo.setBuyTime(strTime);
+				bo.setBuyState(BuyState.strUnread);
+				
+				Cal.saveFile("buyOrder.txt", bo);
+
+				BuyConfirmDlg b = new BuyConfirmDlg();
+				b.setVisible(true);
+				dispose();
+			}
+		});
+		btnOK.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnOK.setBounds(718, 205, 159, 47);
+		contentPane.add(btnOK);
+
+		JButton btnCancel = new JButton("取消");
+		btnCancel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MemberLoginManager m = new MemberLoginManager();
+				m.setVisible(true);
+				dispose();
+			}
+		});
+		btnCancel.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnCancel.setBounds(718, 280, 159, 47);
+		contentPane.add(btnCancel);
+
+		lbCount000 = new JLabel("份");
+		lbCount000.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbCount000.setBounds(485, 10, 46, 47);
+		contentPane.add(lbCount000);
+
+		lbCount001 = new JLabel("份");
+		lbCount001.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbCount001.setBounds(485, 70, 46, 46);
+		contentPane.add(lbCount001);
+
+		lbCount002 = new JLabel("份");
+		lbCount002.setFont(new Font("新細明體", Font.BOLD, 18));
+		lbCount002.setBounds(485, 131, 46, 45);
+		contentPane.add(lbCount002);
+		
+		JButton btnNewButton = new JButton("查詢會員訂單");
+		btnNewButton.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnNewButton.setBounds(718, 130, 159, 47);
+		contentPane.add(btnNewButton);
+
+		// 只能輸入數字
+		KeyAdapter ka = new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				int keyChar = e.getKeyChar();
+				if (keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9) {
+				} else {
+					// 禁用鍵盤事件傳遞
+					e.consume();
+				}
+			}
+		};
+
+		menu000Count.addKeyListener(ka);
+		menu001Count.addKeyListener(ka);
+		menu002Count.addKeyListener(ka);
+
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new JLabelTimerTask(), new Date(), ONE_SECOND);
+
+		// 載入分店名稱
+		List<BranchShop> l = new BranchShopServiceImpl().queryAll();
+
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeUIByShopName();
+			}
+		};
+
+		if (l.size() > 0) {
+			for (BranchShop b : l) {
+				cbShopNameList.addItem(b.getShopName());
+			}
+
+			cbShopNameList.addActionListener(actionListener);
+			cbShopNameList.setSelectedIndex(0);
+		} else {
+			JOptionPane.showMessageDialog(null, "沒有分店可以選擇", "下訂單", JOptionPane.WARNING_MESSAGE);
+		}
+
+		changeUIByShopName();
+
+	}
+
+	void changeUIByShopName() {
+		textArea.setText("");
+		// 獲取分店名稱
+		String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+
+		// 查詢分店資訊
+		List<BranchShop> listBranchShop = new BranchShopServiceImpl().queryAllByShopName(strShopName);
+		BranchShop bs = listBranchShop.get(0);
+		Integer id = bs.getId();
+
+		// 載入分店資訊
+		menu000Name.setText(bs.getMenu000Name());
+		menu001Name.setText(bs.getMenu001Name());
+		menu002Name.setText(bs.getMenu002Name());
+		menu000Price.setText(bs.getMenu000Price().toString());
+		menu001Price.setText(bs.getMenu001Price().toString());
+		menu002Price.setText(bs.getMenu002Price().toString());
+
+		Color cBack = new Color(bs.getBackR(), bs.getBackG(), bs.getBackB());
+		Color cFore = new Color(bs.getForeR(), bs.getForeG(), bs.getForeB());
+
+		contentPane.setBackground(cBack);
+		menu000Name.setForeground(cFore);
+		menu001Name.setForeground(cFore);
+		menu002Name.setForeground(cFore);
+		menu000Price.setForeground(cFore);
+		menu001Price.setForeground(cFore);
+		menu002Price.setForeground(cFore);
+		lb000.setForeground(cFore);
+		lb001.setForeground(cFore);
+		lb002.setForeground(cFore);
+		lbCount000.setForeground(cFore);
+		lbCount001.setForeground(cFore);
+		lbCount002.setForeground(cFore);
+
+		Cal.saveFile("branchShop.txt", bs);
+
+	}
+
+	protected class JLabelTimerTask extends TimerTask {
+		SimpleDateFormat sdf = new SimpleDateFormat(DTF);
+
+		@Override
+		public void run() {
+			String strDateTime = sdf.format(Calendar.getInstance().getTime());
+			lbDateTime.setText(strDateTime);
+		}
+	}
+	
+	public boolean checkField() 
+	{
+		if (cbShopNameList.getItemCount() <= 0)
+		{
+			JOptionPane.showMessageDialog(null, "沒有分店可以選擇", "下訂單", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		String strMenu000Count = menu000Count.getText();
+		String strMenu001Count = menu001Count.getText();
+		String strMenu002Count = menu002Count.getText();
+		if (strMenu000Count.isEmpty() ||
+			strMenu001Count.isEmpty() ||
+			strMenu002Count.isEmpty())
+		{
+			JOptionPane.showMessageDialog(null, "欄位不可為空白", "下訂單", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+	
+	public void printInfo() 
+	{
+		String strMenu000Name = menu000Name.getText();
+		String strMenu001Name = menu001Name.getText();
+		String strMenu002Name = menu002Name.getText();
+		
+		String strMenu000Price = menu000Price.getText();
+		String strMenu001Price = menu001Price.getText();
+		String strMenu002Price = menu002Price.getText();		
+		Integer iMenu000Price = Integer.parseInt(strMenu000Price);
+		Integer iMenu001Price = Integer.parseInt(strMenu001Price);
+		Integer iMenu002Price = Integer.parseInt(strMenu002Price);
+		
+		String strMenu000Count = menu000Count.getText();
+		String strMenu001Count = menu001Count.getText();
+		String strMenu002Count = menu002Count.getText();
+		Integer iMenu000Count = Integer.parseInt(strMenu000Count);
+		Integer iMenu001Count = Integer.parseInt(strMenu001Count);
+		Integer iMenu002Count = Integer.parseInt(strMenu002Count);
+
+		Integer iSum = iMenu000Price*iMenu000Count +
+				       iMenu001Price*iMenu001Count +
+				       iMenu002Price*iMenu002Count;
+		String strResult = lbDateTime.getText() 
+				         + "\n" + cbShopNameList.getSelectedItem().toString()
+				         + "\n" + strMenu000Name + "\t" + iMenu000Price + "元\t" + iMenu000Count + "個\t=\t" + iMenu000Price*iMenu000Count + "元"
+				         + "\n" + strMenu001Name + "\t" + iMenu001Price + "元\t" + iMenu001Count + "個\t=\t" + iMenu001Price*iMenu001Count + "元"
+				         + "\n" + strMenu002Name + "\t" + iMenu002Price + "元\t" + iMenu002Count + "個\t=\t" + iMenu001Price*iMenu001Count + "元"
+				         + "\n-----------------------------"
+				         + "\n共" + iSum + "元";
+		textArea.setText(strResult);
+		Cal.saveFile("totalMoney.txt", strResult);
+	}
+}

@@ -1,0 +1,45 @@
+setTitle("魔王連鎖店");
+
+//將視窗位置設置在正中央
+setLocationRelativeTo(contentPane);
+
+JButton btnBranchShop = new JButton("分店管理");
+btnBranchShop.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		BranchShopManager m = new BranchShopManager();
+		m.setVisible(true);
+		dispose();
+	}
+});
+
+JButton btnEmployee = new JButton("員工");
+btnEmployee.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		EmployeeLoginManager elm = new EmployeeLoginManager();
+		elm.setVisible(true);
+		dispose();
+	}
+});
+
+JButton btnMember = new JButton("會員");
+btnMember.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		MemberLoginManager mlm = new MemberLoginManager();
+		mlm.setVisible(true);
+		dispose();
+	}
+});
+
+JButton btnBuyOrder = new JButton("訂單查詢");
+btnBuyOrder.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		OrderLoginManager dlg = new OrderLoginManager();
+		dlg.setVisible(true);
+		dispose();
+	}
+});
+		

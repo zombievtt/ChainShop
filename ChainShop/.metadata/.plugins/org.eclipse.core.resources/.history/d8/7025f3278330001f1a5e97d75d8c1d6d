@@ -1,0 +1,119 @@
+package model;
+
+public class BranchShop {
+	private Integer Id;
+	private String shopName;
+	private Integer backR, backG, backB;
+	private Integer foreR, foreG, foreB;
+	private String menu000Name, menu001Name, menu002Name;
+	private Integer menu000Price, menu001Price, menu002Price;
+	public BranchShop() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public BranchShop(String shopName, Integer backR, Integer backG, Integer backB, Integer foreR, Integer foreG,
+			Integer foreB, String menu000Name, String menu001Name, String menu002Name, Integer menu000Price,
+			Integer menu001Price, Integer menu002Price) {
+		super();
+		this.shopName = shopName;
+		this.backR = backR;
+		this.backG = backG;
+		this.backB = backB;
+		this.foreR = foreR;
+		this.foreG = foreG;
+		this.foreB = foreB;
+		this.menu000Name = menu000Name;
+		this.menu001Name = menu001Name;
+		this.menu002Name = menu002Name;
+		this.menu000Price = menu000Price;
+		this.menu001Price = menu001Price;
+		this.menu002Price = menu002Price;
+	}
+	public Integer getId() {
+		return Id;
+	}
+	public void setId(Integer id) {
+		Id = id;
+	}
+	public String getShopName() {
+		return shopName;
+	}
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	public Integer getBackR() {
+		return backR;
+	}
+	public void setBackR(Integer backR) {
+		this.backR = backR;
+	}
+	public Integer getBackG() {
+		return backG;
+	}
+	public void setBackG(Integer backG) {
+		this.backG = backG;
+	}
+	public Integer getBackB() {
+		return backB;
+	}
+	public void setBackB(Integer backB) {
+		this.backB = backB;
+	}
+	public Integer getForeR() {
+		return foreR;
+	}
+	public void setForeR(Integer foreR) {
+		this.foreR = foreR;
+	}
+	public Integer getForeG() {
+		return foreG;
+	}
+	public void setForeG(Integer foreG) {
+		this.foreG = foreG;
+	}
+	public Integer getForeB() {
+		return foreB;
+	}
+	public void setForeB(Integer foreB) {
+		this.foreB = foreB;
+	}
+	public String getMenu000Name() {
+		return menu000Name;
+	}
+	public void setMenu000Name(String menu000Name) {
+		this.menu000Name = menu000Name;
+	}
+	public String getMenu001Name() {
+		return menu001Name;
+	}
+	public void setMenu001Name(String menu001Name) {
+		this.menu001Name = menu001Name;
+	}
+	public String getMenu002Name() {
+		return menu002Name;
+	}
+	public void setMenu002Name(String menu002Name) {
+		this.menu002Name = menu002Name;
+	}
+	public Integer getMenu000Price() {
+		return menu000Price;
+	}
+	public void setMenu000Price(Integer menu000Price) {
+		this.menu000Price = menu000Price;
+	}
+	public Integer getMenu001Price() {
+		return menu001Price;
+	}
+	public void setMenu001Price(Integer menu001Price) {
+		this.menu001Price = menu001Price;
+	}
+	public Integer getMenu002Price() {
+		return menu002Price;
+	}
+	public void setMenu002Price(Integer menu002Price) {
+		this.menu002Price = menu002Price;
+	}
+	
+	
+	
+}

@@ -1,0 +1,96 @@
+package dao.Impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.DbConnection;
+import model.BranchShop;
+import model.BuyOrder;
+
+public class BranchShopDaoImpl {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	//Create
+	public void addBranchShopDaoImpl(BranchShop bs)
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "insert into branch_shop(shop_name, back_r, back_g, back_b, fore_r, fore_g, fore_b, menu_000_name,  menu_000_price, menu_001_name, menu_001_price, menu_002_name, menu_002_price)"
+				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1,  bs.getShopName());
+			ps.setInt(2, bs.getBackR());
+			ps.setInt(3, bs.getBackG());
+			ps.setInt(4, bs.getBackB());
+			ps.setInt(5, bs.getForeR());
+			ps.setInt(6, bs.getForeG());
+			ps.setInt(7, bs.getForeB());
+			ps.setString(8, bs.getMenu000Name());
+			ps.setInt(9, bs.getMenu000Price());
+			ps.setString(10, bs.getMenu001Name());
+			ps.setInt(11, bs.getMenu001Price());
+			ps.setString(12, bs.getMenu002Name());
+			ps.setInt(13, bs.getMenu002Price());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//Read
+	public List<BranchShop> queryAll()
+	{
+		Connection conn = DbConnection.getDb();
+		String SQL = "select * from branch_shop";
+		List<BranchShop> l = new ArrayList<>();
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				BranchShop bs = new BranchShop();
+				bs.setId(rs.getInt("id"));
+				bs.setShopName(rs.getString("branch_shop"));
+				bs.setBackR(rs.getInt("back_r"));
+				bs.setBackG(rs.getInt("back_g"));
+				bs.setBackB(rs.getInt("back_b"));
+				bs.setForeR(rs.getInt("fore_r"));
+				bs.setForeG(rs.getInt("fore_g"));
+				bs.setForeB(rs.getInt("fore_b"));
+				bs.setMenu000Name(rs.getString("menu_000_name"));
+				bs.setMenu000Price(rs.getInt("menu_000_price"));
+				bs.setMenu001Name(rs.getString("menu_001_name"));
+				bs.setMenu001Price(rs.getInt("menu_001_price"));
+				bs.setMenu002Name(rs.getString("menu_002_name"));
+				bs.setMenu002Price(rs.getInt("menu_002_price"));
+				l.add(bs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return l;
+	}
+	public List<BranchShop> queryAllByShopName(String shopName);
+	
+	
+	
+	//Update
+	public void updateBuyOrderShopById(BuyOrder bs, Integer Id);
+	
+	
+	//Delete
+	public void deleteBuyOrderById(Integer id);
+}

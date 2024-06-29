@@ -1,0 +1,214 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import model.BranchShop;
+import model.BuyOrder;
+import model.Member;
+import service.Impl.BranchShopServiceImpl;
+import service.Impl.BuyOrderServiceImpl;
+import util.Cal;
+
+import javax.swing.JComboBox;
+import java.awt.Font;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JButton;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ListSelectionModel;
+
+public class BuyQueryOrderByMember extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private BuyOrder bo = null;
+	private List<BuyOrder> listBuyOrder = null;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+	private JComboBox cbShopNameList = null;
+	private List<BranchShop> listBranchShop = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BuyQueryOrderByMember frame = new BuyQueryOrderByMember();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BuyQueryOrderByMember() {
+		Member m = (Member)Cal.readFile("member.txt");
+		setTitle("會員查詢清單");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1242, 568);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// 將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+				
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		cbShopNameList = new JComboBox();
+		cbShopNameList.setFont(new Font("新細明體", Font.BOLD, 18));
+		cbShopNameList.setBounds(10, 10, 192, 42);
+		contentPane.add(cbShopNameList);
+		
+		JButton btnBack = new JButton("返回");
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BuyDlg bd = new BuyDlg();
+				bd.setVisible(true);
+				dispose();
+				
+			}
+		});
+		btnBack.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnBack.setBounds(1024, 10, 192, 42);
+		contentPane.add(btnBack);
+		
+		listBranchShop = new BranchShopServiceImpl().queryAll();
+		cbShopNameList.addItem("全部");
+		for (BranchShop bs:listBranchShop)
+		{
+			cbShopNameList.addItem(bs.getShopName());
+		}
+		
+		model = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"id", "\u540D", "\u5E33\u865F", "\u5BC6\u78BC", "\u5206\u5E97\u540D", "\u83DCA\u540D", "\u83DCA\u6578\u91CF", "\u83DCA\u50F9\u683C", "\u83DCB\u540D", "\u83DCB\u50F9\u683C", "\u83DCB\u6578\u91CF", "\u83DCC\u540D", "\u83DCC\u50F9\u683C", "\u83DCC\u6578\u91CF", "\u5C0F\u8A08", "\u65E5\u671F", "\u6642\u9593", "\u8A02\u55AE\u72C0\u614B"
+				}
+			);
+		//使用精靈新增一列表格 與資料表order_buy相對應
+		tableHistory = new JTable(model);
+		tableHistory.setFont(new Font("新細明體", Font.BOLD, 12));
+		tableHistory.setShowVerticalLines(false);
+		tableHistory.setShowHorizontalLines(false);
+		tableHistory.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        tableHistory.setBounds(0, 0, 881, 379);
+        
+		JScrollPane scrollPane = new JScrollPane(tableHistory, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(10, 73, 1206, 440);
+		contentPane.add(scrollPane);
+		
+		
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 獲取分店名稱
+				String strShopName = cbShopNameList.getSelectedItem().toString().trim();
+
+				// 查詢分店資訊
+				if (strShopName.equals("全部"))
+				{
+					//列出歷史訂單
+					model = new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"id", "\u540D", "\u5E33\u865F", "\u5BC6\u78BC", "\u5206\u5E97\u540D", "\u83DCA\u540D", "\u83DCA\u6578\u91CF", "\u83DCA\u50F9\u683C", "\u83DCB\u540D", "\u83DCB\u50F9\u683C", "\u83DCB\u6578\u91CF", "\u83DCC\u540D", "\u83DCC\u50F9\u683C", "\u83DCC\u6578\u91CF", "\u5C0F\u8A08", "\u65E5\u671F", "\u6642\u9593", "\u8A02\u55AE\u72C0\u614B"
+							}
+						);
+					List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAllByAccount(m.getAccount());
+					for (BuyOrder bo: listBuyOrder)
+					{
+						Vector<String> row = new Vector<String>();
+			        	row.add(bo.getId().toString());
+			        	row.add(bo.getMemberName());
+			        	row.add(bo.getMemberAccount());
+			        	row.add(bo.getMemberPassword());
+			        	row.add(bo.getShopName());
+			        	row.add(bo.getMenu000Name());
+			        	row.add(bo.getMenu000Price().toString() + "元");
+			        	row.add(bo.getMenu000Count().toString() + "份");
+			        	row.add(bo.getMenu001Name());
+			        	row.add(bo.getMenu001Price().toString() + "元");
+			        	row.add(bo.getMenu001Count().toString() + "份");
+			        	row.add(bo.getMenu002Name());
+			        	row.add(bo.getMenu002Price().toString() + "元");
+			        	row.add(bo.getMenu002Count().toString() + "份");
+			        	row.add(bo.getBuySum().toString() + "元");
+			        	row.add(bo.getBuyDate());
+			        	row.add(bo.getBuyTime());
+			        	row.add(bo.getBuyState());
+			        	
+			        	model.addRow(row);
+					}
+				}
+				else
+				{
+					//列出歷史訂單
+					model = new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"id", "\u540D", "\u5E33\u865F", "\u5BC6\u78BC", "\u5206\u5E97\u540D", "\u83DCA\u540D", "\u83DCA\u6578\u91CF", "\u83DCA\u50F9\u683C", "\u83DCB\u540D", "\u83DCB\u50F9\u683C", "\u83DCB\u6578\u91CF", "\u83DCC\u540D", "\u83DCC\u50F9\u683C", "\u83DCC\u6578\u91CF", "\u5C0F\u8A08", "\u65E5\u671F", "\u6642\u9593", "\u8A02\u55AE\u72C0\u614B"
+							}
+						);
+					List<BuyOrder> listBuyOrder = new BuyOrderServiceImpl().queryAllByShopNameAndAccount(strShopName, m.getAccount());
+					for (BuyOrder bo: listBuyOrder)
+					{
+						Vector<String> row = new Vector<String>();
+			        	row.add(bo.getId().toString());
+			        	row.add(bo.getMemberName());
+			        	row.add(bo.getMemberAccount());
+			        	row.add(bo.getMemberPassword());
+			        	row.add(bo.getShopName());
+			        	row.add(bo.getMenu000Name());
+			        	row.add(bo.getMenu000Price().toString() + "元");
+			        	row.add(bo.getMenu000Count().toString() + "份");
+			        	row.add(bo.getMenu001Name());
+			        	row.add(bo.getMenu001Price().toString() + "元");
+			        	row.add(bo.getMenu001Count().toString() + "份");
+			        	row.add(bo.getMenu002Name());
+			        	row.add(bo.getMenu002Price().toString() + "元");
+			        	row.add(bo.getMenu002Count().toString() + "份");
+			        	row.add(bo.getBuySum().toString() + "元");
+			        	row.add(bo.getBuyDate());
+			        	row.add(bo.getBuyTime());
+			        	row.add(bo.getBuyState());
+			        	
+			        	model.addRow(row);
+					}
+				}
+				
+		       
+		        	
+		       
+				
+			}
+		};
+		
+		cbShopNameList.addActionListener(actionListener);
+		cbShopNameList.setSelectedIndex(0);
+	}
+}

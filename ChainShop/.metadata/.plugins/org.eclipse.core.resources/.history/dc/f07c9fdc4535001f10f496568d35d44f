@@ -1,0 +1,68 @@
+package controller;
+
+import java.awt.EventQueue;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import model.BranchShop;
+import model.BuyOrder;
+
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+public class OrderListDlg extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private BuyOrder bo = null;
+	private List<BuyOrder> listBuyOrder = null;
+	private JScrollPane jScroll = null;
+	private DefaultTableModel model = null;
+	private JTable tableHistory = null;
+	private JComboBox cbShopNameList = null;
+	private List<BranchShop> listBranchShop = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					OrderListDlg frame = new OrderListDlg();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public OrderListDlg() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("訂單查詢");
+		setBounds(100, 100, 1285, 509);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// 將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+				
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		cbShopNameList.setBounds(1085, 10, 174, 37);
+		contentPane.add(cbShopNameList);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 57, 1249, 403);
+		contentPane.add(scrollPane);
+	}
+}

@@ -1,0 +1,48 @@
+package service.Impl;
+
+import java.util.List;
+
+import dao.EmployeeDao;
+import dao.Impl.EmployeeDaoImpl;
+import model.Employee;
+
+public class EmployeeServiceImpl implements EmployeeDao {
+
+	private static EmployeeDaoImpl edi = new EmployeeDaoImpl();
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	@Override
+	public void addEmployee(Employee e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Employee> queryAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Employee> queryAllByShopName(String shopName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateEmployeeById(Employee e, Integer Id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteEmployeeById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

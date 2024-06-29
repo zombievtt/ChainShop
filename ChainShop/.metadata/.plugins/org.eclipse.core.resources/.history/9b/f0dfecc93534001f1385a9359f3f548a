@@ -1,0 +1,131 @@
+package controller;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import model.Member;
+import service.Impl.MemberServiceImpl;
+
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+public class MemberLoginManager extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MemberLoginManager frame = new MemberLoginManager();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MemberLoginManager() {
+		setTitle("登入");
+		getContentPane().setLayout(null);
+		
+		
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		//將視窗位置設置在正中央
+		setLocationRelativeTo(contentPane);
+		
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("帳號:");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("新細明體", Font.BOLD, 18));
+		lblNewLabel.setBounds(10, 22, 117, 40);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("密碼:");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("新細明體", Font.BOLD, 18));
+		lblNewLabel_1.setBounds(10, 92, 117, 40);
+		contentPane.add(lblNewLabel_1);
+		
+		JButton btnNewButton_2 = new JButton("前往註冊");
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MemberRegisterManager mrm = new MemberRegisterManager();
+				mrm.setVisible(true);
+				dispose();
+			}
+		});
+		btnNewButton_2.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnNewButton_2.setBounds(297, 163, 110, 45);
+		contentPane.add(btnNewButton_2);
+		
+		JTextField textField = new JTextField();
+		textField.setFont(new Font("新細明體", Font.BOLD, 18));
+		textField.setBounds(151, 22, 263, 40);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JTextField textField_1 = new JTextField();
+		textField_1.setFont(new Font("新細明體", Font.BOLD, 18));
+		textField_1.setBounds(151, 92, 263, 40);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
+		
+		btnNewButton.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnNewButton.setBounds(151, 163, 110, 45);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("返回");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				StartManager s = new StartManager();
+				s.setVisible(true);
+				dispose();
+			}
+		});
+		btnNewButton_1.setFont(new Font("新細明體", Font.BOLD, 18));
+		btnNewButton_1.setBounds(10, 163, 110, 45);
+		contentPane.add(btnNewButton_1);
+		
+		JButton btnNewButton = new JButton("登入");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				String strName = name.getText();
+//				String strAccount = account.getText();
+//				String strPassword = password.getText();
+				List<Member> l = new MemberServiceImpl().queryAllByAccount(strAccount);
+//				BuyDlg bd = new BuyDlg();
+//				bd.setVisible(true);
+//				dispose();
+			}
+		});
+	}
+}

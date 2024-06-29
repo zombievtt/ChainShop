@@ -1,0 +1,63 @@
+
+
+public class EmployeeLoginManager extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JButton btnLogin;
+
+	
+	public EmployeeLoginManager() {
+		setTitle("員工登入");
+
+		
+		JButton btnLogin = new JButton();
+		btnLogin.setText("登入");
+		btnLogin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String strAccount = account.getText().trim();
+				String strPassword = password.getText().trim();
+				if (strAccount.isEmpty() ||
+					strPassword.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null,"欄位不可為空","登入",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+
+				//查詢員工帳號存不存在
+				List<Employee> l = new EmployeeServiceImpl().queryAllByAccount(strAccount);
+				if (l.size() > 0)
+				{
+					//存在
+					Employee employee = l.get(0);
+
+					//比對密碼
+					if (employee.getPassword().equals(strPassword))
+					{
+						//密碼正確
+						//儲存登入員工資訊
+						Cal.saveFile("employee.txt" , employee);
+						
+						//前往員工使用介面
+						EmployeeDlg ed = new EmployeeDlg();
+						ed.setVisible(true);
+						dispose();						
+					}
+					else
+					{
+						//密碼錯誤
+						JOptionPane.showMessageDialog(null,"帳號或密碼錯誤","登入",JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				else
+				{
+					//不存在
+					JOptionPane.showMessageDialog(null,"帳號或密碼錯誤","登入",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
+	}
+
+}
